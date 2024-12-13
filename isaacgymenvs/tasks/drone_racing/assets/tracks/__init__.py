@@ -7,3 +7,4 @@ from .splits import TrackSplitsOptions, create_track_splits
 from .turns import TrackTurnsOptions, create_track_turns
 from .walls import TrackWallsOptions, create_track_walls
 from .wavy_eight import TrackWavyEightOptions, create_track_wavy_eight
+from .slalom import TrackSlalomOptions, create_track_slalom

@@ -10,7 +10,7 @@ fi
 cd ../../../../../
 
 python train.py task=DRRandom \
-  num_envs=16384 \
+  num_envs=64 \
   headless=$1 \
   wandb_activate=$2 \
   max_iterations=$3 \

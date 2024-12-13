@@ -8,10 +8,10 @@ class TrackOptions:
     enable_debug_visualization: bool = False
 
     # difference of gate outer and inner length
-    gate_size: float = 0.3
+    gate_size: float = 1.2
 
     # x-axis length of the hollow cuboid representing the gates
-    gate_length_x: float = 0.15
+    gate_length_x: float = 0.05
 
     # gate color
     gate_color: List[float] = field(default_factory=lambda: [1.0, 0.5, 0.3, 1.0])

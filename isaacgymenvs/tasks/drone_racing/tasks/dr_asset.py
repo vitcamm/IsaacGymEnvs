@@ -16,6 +16,7 @@ from isaacgymenvs.tasks.drone_racing.assets import (
     create_track_wavy_eight,
     create_track_turns,
     create_track_simple_stick,
+    create_track_slalom,
     TrackMultiStoryOptions,
     TrackSplitsOptions,
     TrackWallsOptions,
@@ -25,6 +26,7 @@ from isaacgymenvs.tasks.drone_racing.assets import (
     TrackWavyEightOptions,
     TrackTurnsOptions,
     TrackSimpleStickOptions,
+    TrackSlalomOptions,
 )
 from isaacgymenvs.tasks.drone_racing.waypoint import (
     WaypointData,
@@ -60,6 +62,7 @@ class DRAsset(DRDefaultOut):
             or self.asset_name == "turns"
             or self.asset_name == "simple_stick"
             or self.asset_name == "simple_stick_no_obst"
+            or self.asset_name == "slalom"
         )
         assert is_asset_name_valid
         self.gnd_offset: float = cfg["env"]["groundOffset"]
@@ -141,6 +144,10 @@ class DRAsset(DRDefaultOut):
         elif self.asset_name == "simple_stick_no_obst":
             track_asset, track_wp_list = create_track_simple_stick(
                 self.gym, self.sim, TrackSimpleStickOptions(add_obstacles=False)
+            )
+        elif self.asset_name == "slalom":
+            track_asset, track_wp_list = create_track_slalom(
+                self.gym, self.sim, TrackSlalomOptions()
             )
 
         self.track_wp_data = WaypointData.from_waypoint_list(
