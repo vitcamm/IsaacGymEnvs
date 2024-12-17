@@ -3,7 +3,7 @@
 if [ "$#" -ne 4 ] && [ "$#" -ne 5 ]; then
     echo "Error: incorrect arg count"
     echo "Require: headless wandb max_iter episode_len [checkpoint]"
-    echo "Example: ./train_splits_no_cam.sh True True 300 175"
+    echo "Example: ./train_slalom.sh True True 300 175"
     exit 1
 fi
 
@@ -13,7 +13,7 @@ python train.py task=DRAsset \
   headless=$1 \
   wandb_activate=$2 \
   max_iterations=$3 \
-  num_envs=64 \
+  num_envs=512 \
   task.assetName=slalom \
   task.env.maxEpisodeLength=$4 \
   task.env.appendWpDist=0 \

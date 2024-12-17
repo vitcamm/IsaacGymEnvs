@@ -28,6 +28,14 @@ def create_track_slalom(
     waypoints: List[Waypoint] = [
         Waypoint(
             index=0,
+            xyz=[1.5, -2.5, 1.5],
+            rpy=[0.0, 0.0, 0.0],
+            length_y=1.0,
+            length_z=1.0,
+            gate=False,
+        ),
+        Waypoint(
+            index=1,
             xyz=[4.55, -2.5, 1.5],
             rpy=[0.0, 0.0, 0.0],
             length_y=1.5,
@@ -35,7 +43,7 @@ def create_track_slalom(
             gate=True,
         ),
         Waypoint(
-            index=1,
+            index=2,
             xyz=[11.55, 2.5, 1.5],
             rpy=[0.0, 0.0, 0.0],
             length_y=1.5,
@@ -43,7 +51,7 @@ def create_track_slalom(
             gate=True,
         ),
         Waypoint(
-            index=2,
+            index=3,
             xyz=[18.55, -2.5, 1.5],
             rpy=[0.0, 0.0, 0.0],
             length_y=1.5,
@@ -51,7 +59,7 @@ def create_track_slalom(
             gate=True,
         ),
         Waypoint(
-            index=3,
+            index=4,
             xyz=[25.55, 2.5, 1.5],
             rpy=[0.0, 0.0, 0.0],
             length_y=1.5,

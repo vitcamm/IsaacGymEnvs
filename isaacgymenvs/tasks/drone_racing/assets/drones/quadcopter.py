@@ -26,19 +26,22 @@ class DroneQuadcopterOptions:
     file_name: str = "drone_quadcopter"
 
     # length of the two front arms [m]
-    arm_length_front: float = 0.125
+    arm_length_front: float = 0.1825
 
     # length of the two back arms [m]
-    arm_length_back: float = 0.125
+    arm_length_back: float = 0.1825
 
     # thickness of the arm plate [m]
     arm_thickness: float = 0.01
 
     # separation angle between two front arms [rad]
-    arm_front_angle: float = 1.780236
+    arm_front_angle: float = 1.232202
+
+    # separation angle between two back arms [rad]
+    arm_back_angle: float = 1.6685348
 
     # diameter of the motor cylinder [m]
-    motor_diameter: float = 0.023
+    motor_diameter: float = 0.027
 
     # height of the motor cylinder [m]
     motor_height: float = 0.006
@@ -50,20 +53,20 @@ class DroneQuadcopterOptions:
     central_body_dim: List[float] = field(default_factory=lambda: [0.15, 0.05, 0.05])
 
     # propeller cylinder diameter [m]
-    propeller_diameter: float = 0.12954
+    propeller_diameter: float = 0.1318
 
     # propeller cylinder height [m]
     propeller_height: float = 0.01
 
     # mass of the whole quadcopter treated as a rigid body
-    mass: float = 0.752
+    mass: float = 0.9186
 
     # center of mass position in body frame [m]
     center_of_mass: List[float] = field(default_factory=lambda: [0.0, 0.0, 0.0])
 
     # diagonal inertia in [kg m^2]
     diagonal_inertia: List[float] = field(
-        default_factory=lambda: [0.0025, 0.0021, 0.0043]
+        default_factory=lambda: [0.008951, 0.0031, 0.01161]
     )
 
     # quaternion representing the principle axes matrix [w, x, y, z]
@@ -143,6 +146,8 @@ def create_drone_quadcopter(
             ]
         )
     )
+
+    
     arm_14_xyz = [
         math.cos(options.arm_front_angle / 2) * arm_offset,
         math.sin(options.arm_front_angle / 2) * arm_offset,
