@@ -43,7 +43,7 @@ class QuadFpvParams:
 
     # toggles
     show_viewer: bool = True
-    enable_joysticks: bool = False
+    enable_joysticks: bool = True
     enable_zmq: bool = True
     show_fpv: bool = True
     fpv_depth: bool = False

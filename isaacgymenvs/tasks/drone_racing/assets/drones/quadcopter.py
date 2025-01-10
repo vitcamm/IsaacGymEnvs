@@ -23,7 +23,7 @@ class DroneQuadcopterOptions:
     """
 
     # file name
-    file_name: str = "drone_quadcopter"
+    file_name: str = "drone_a2r_test"
 
     # length of the two front arms [m]
     arm_length_front: float = 0.1825
@@ -31,8 +31,12 @@ class DroneQuadcopterOptions:
     # length of the two back arms [m]
     arm_length_back: float = 0.1825
 
+    arm_offset_back: float = arm_length_back/2
+
+    arm_offset_front: float = arm_length_front/2
+
     # thickness of the arm plate [m]
-    arm_thickness: float = 0.01
+    arm_thickness: float = 0.007
 
     # separation angle between two front arms [rad]
     arm_front_angle: float = 1.232202
@@ -47,10 +51,10 @@ class DroneQuadcopterOptions:
     motor_height: float = 0.006
 
     # central body cuboid position in body frame [m]
-    central_body_pos: List[float] = field(default_factory=lambda: [0.0, 0.0, 0.015])
+    central_body_pos: List[float] = field(default_factory=lambda: [0.0, 0.0, 0.0])
 
     # central body cuboid dimension [m]
-    central_body_dim: List[float] = field(default_factory=lambda: [0.15, 0.05, 0.05])
+    central_body_dim: List[float] = field(default_factory=lambda: [0.72, 0.05, 0.01])
 
     # propeller cylinder diameter [m]
     propeller_diameter: float = 0.1318
@@ -62,7 +66,7 @@ class DroneQuadcopterOptions:
     mass: float = 0.9186
 
     # center of mass position in body frame [m]
-    center_of_mass: List[float] = field(default_factory=lambda: [0.0, 0.0, 0.0])
+    center_of_mass: List[float] = field(default_factory=lambda: [0.001, 0.012, -0.006])
 
     # diagonal inertia in [kg m^2]
     diagonal_inertia: List[float] = field(
@@ -133,14 +137,11 @@ def create_drone_quadcopter(
     )
     visuals.append(central_body_visual)
 
-    # arm 1, 4
-    arm_offset = (
-        options.arm_length_front + options.arm_length_back
-    ) / 2 - options.arm_length_back
-    arm_14_geometry = urdfpy.Geometry(
+    # arm 1
+    arm_1_geometry = urdfpy.Geometry(
         box=urdfpy.Box(
             [
-                options.arm_length_front + options.arm_length_back,
+                options.arm_length_back,
                 options.motor_diameter,
                 options.arm_thickness,
             ]
@@ -148,35 +149,77 @@ def create_drone_quadcopter(
     )
 
     
-    arm_14_xyz = [
-        math.cos(options.arm_front_angle / 2) * arm_offset,
-        math.sin(options.arm_front_angle / 2) * arm_offset,
+    arm_1_xyz = [
+        math.cos(math.pi + options.arm_back_angle / 2)*options.arm_offset_back,
+        math.sin(math.pi +options.arm_back_angle / 2)*options.arm_offset_back,
         -options.arm_thickness / 2,
     ]
 
-    arm_14_rpy = [0, 0, options.arm_front_angle / 2]
-    arm_14_origin = urdfpy.xyz_rpy_to_matrix(arm_14_xyz + arm_14_rpy)
-    arm_14_visual = urdfpy.Visual(geometry=arm_14_geometry, origin=arm_14_origin)
-    visuals.append(arm_14_visual)
+    arm_1_rpy = [0, 0, options.arm_back_angle / 2]
+    arm_1_origin = urdfpy.xyz_rpy_to_matrix(arm_1_xyz + arm_1_rpy)
+    arm_1_visual = urdfpy.Visual(geometry=arm_1_geometry, origin=arm_1_origin)
+    visuals.append(arm_1_visual)
 
-    # arm 2, 3
-    arm_23_geometry = arm_14_geometry
-    arm_23_xyz = [
-        math.cos(options.arm_front_angle / 2) * arm_offset,
-        -math.sin(options.arm_front_angle / 2) * arm_offset,
+    # arm 4
+    arm_4_geometry = urdfpy.Geometry(
+        box=urdfpy.Box(
+            [
+                options.arm_length_front,
+                options.motor_diameter,
+                options.arm_thickness,
+            ]
+        )
+    )
+
+    
+    arm_4_xyz = [
+        math.cos(options.arm_front_angle / 2)*options.arm_offset_front,
+        math.sin(options.arm_front_angle / 2)*options.arm_offset_front,
         -options.arm_thickness / 2,
     ]
 
-    arm_23_rpy = [0, 0, -options.arm_front_angle / 2]
-    arm_23_origin = urdfpy.xyz_rpy_to_matrix(arm_23_xyz + arm_23_rpy)
-    arm_23_visual = urdfpy.Visual(geometry=arm_23_geometry, origin=arm_23_origin)
-    visuals.append(arm_23_visual)
+    arm_4_rpy = [0, 0, options.arm_front_angle / 2]
+    arm_4_origin = urdfpy.xyz_rpy_to_matrix(arm_4_xyz + arm_4_rpy)
+    arm_4_visual = urdfpy.Visual(geometry=arm_4_geometry, origin=arm_4_origin)
+    visuals.append(arm_4_visual)
+
+    # arm 2
+    arm_2_geometry = arm_4_geometry
+    arm_2_xyz = [
+        math.cos(-options.arm_front_angle / 2)*options.arm_offset_front,
+        math.sin(-options.arm_front_angle / 2)*options.arm_offset_front, 
+        -options.arm_thickness / 2,
+    ]
+
+    arm_2_rpy = [0, 0, -options.arm_front_angle / 2]
+    arm_2_origin = urdfpy.xyz_rpy_to_matrix(arm_2_xyz + arm_2_rpy)
+    arm_2_visual = urdfpy.Visual(geometry=arm_2_geometry, origin=arm_2_origin)
+    visuals.append(arm_2_visual)
+    
+    # arm 3
+    arm_3_geometry = arm_1_geometry
+    arm_3_xyz = [
+        math.cos(math.pi - options.arm_back_angle / 2)*options.arm_offset_back,
+        math.sin(math.pi - options.arm_back_angle / 2)*options.arm_offset_back,
+        -options.arm_thickness / 2,
+    ]
+
+    arm_3_rpy = [0, 0, -options.arm_front_angle / 2]
+    arm_3_origin = urdfpy.xyz_rpy_to_matrix(arm_3_xyz + arm_3_rpy)
+    arm_3_visual = urdfpy.Visual(geometry=arm_3_geometry, origin=arm_3_origin)
+    visuals.append(arm_3_visual)
 
     # rotors
-    rotor_angles = [
-        options.arm_front_angle / 2 + math.pi,
+    #rotor_angles = [
+    #    options.arm_front_angle / 2 + math.pi,
+    #    -options.arm_front_angle / 2,
+    #    -options.arm_front_angle / 2 + math.pi,
+    #    options.arm_front_angle / 2,
+    #]
+    rotor_angles = [ 
+        options.arm_back_angle / 2 + math.pi,
         -options.arm_front_angle / 2,
-        -options.arm_front_angle / 2 + math.pi,
+        math.pi -options.arm_back_angle / 2,
         options.arm_front_angle / 2,
     ]
     for i in [1, 2, 3, 4]:
@@ -216,7 +259,7 @@ def create_drone_quadcopter(
         propeller_origin = urdfpy.xyz_rpy_to_matrix(propeller_xyz + [0, 0, 0])
         propeller_material = None
         if i == 2 or i == 4:
-            propeller_material = urdfpy.Material("red", color=[1.0, 0.0, 0.0, 1.0])
+            propeller_material = urdfpy.Material("green", color=[0.0, 1.0, 0.0, 1.0])
         propeller_visual = urdfpy.Visual(
             geometry=propeller_geometry,
             origin=propeller_origin,
